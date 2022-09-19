@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Exceptions\UnauthorizedException as PermissionAuthorizedException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -67,6 +68,9 @@ class Handler extends ExceptionHandler
             case NotFoundHttpException::class:
                 return JsonResponder::notFound('Route Not Found');
 
+            case MethodNotAllowedHttpException::class:
+                return JsonResponder::methodNotAllowed($exception->getMessage());
+
             case ModelNotFoundException::class:
                 return JsonResponder::notFound('The resource is not found');
 
@@ -82,6 +86,7 @@ class Handler extends ExceptionHandler
 
             default:
                 info($exception);
+
                 return JsonResponder::internalServerError(data: $this->getInternalServerErrorDetail($exception));
         }
     }
