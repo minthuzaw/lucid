@@ -70,10 +70,7 @@ return [
     |
     */
 
-    'middleware' => [
-        'web',
-        'webBasicAuth',
-    ],
+    'middleware' => ['web', 'webBasicAuth'],
 
     /*
     |--------------------------------------------------------------------------
@@ -192,8 +189,18 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
-                'maxProcesses' => 3,
+            'send-otp' => [
+                'connection' => 'redis',
+                'queue' => ['email_otp', 'mobile_otp'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 10,
+                'maxTime' => 0,
+                'maxJobs' => 0,
+                'memory' => 128,
+                'tries' => 3,
+                'timeout' => 60,
+                'nice' => 0,
             ],
         ],
     ],
