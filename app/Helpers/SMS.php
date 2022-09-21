@@ -42,25 +42,25 @@ class SMS
     {
         $baseUrl = config("sms.drivers.$this->driver.base_url");
         $token = config("sms.drivers.$this->driver.token");
-        $sender = config("sms.sender");
+        $sender = config('sms.sender');
 
         try {
             $response = $this->httpClient
-                ->request("POST", "$baseUrl/send", [
-                    "headers" => [
-                        "Authorization" => "Bearer $token",
+                ->request('POST', "$baseUrl/send", [
+                    'headers' => [
+                        'Authorization' => "Bearer $token",
                     ],
-                    "json" => [
-                        "to" => $to,
-                        "message" => $message,
-                        "sender" => $sender,
+                    'json' => [
+                        'to' => $to,
+                        'message' => $message,
+                        'sender' => $sender,
                     ],
                 ]);
 
             return json_decode($response->getBody()->read(1024));
         } catch (GuzzleException $exception) {
             if ($exception->getCode() === 401) {
-                info("Unauthorized to send SMS via SMSPOH, please check your smspoh token");
+                info('Unauthorized to send SMS via SMSPOH, please check your smspoh token');
             }
             throw $exception;
         }

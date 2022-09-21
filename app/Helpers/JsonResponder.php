@@ -38,7 +38,7 @@ class JsonResponder
         return self::respond($message, 404);
     }
 
-    public static function methodNotAllowed($message = "The current method not allow for this route")
+    public static function methodNotAllowed($message = 'The current method not allow for this route')
     {
         return self::respond($message, 405);
     }

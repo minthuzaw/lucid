@@ -10,5 +10,5 @@ return [
         ],
     ],
 
-    "sender" => env("SMS_SENDER", env("APP_NAME", "Onenex")),
+    'sender' => env('SMS_SENDER', env('APP_NAME', 'Onenex')),
 ];

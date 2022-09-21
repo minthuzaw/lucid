@@ -29,10 +29,10 @@ class QueryBuilderHelper
 
                 if (Arr::isAssoc($sortableFields)) {
                     $allowedFields = collect($sortableFields)->keys()->all();
-                    $field = $sortableFields[$column["column"]];
+                    $field = $sortableFields[$column['column']];
                 } else {
                     $allowedFields = $sortableFields;
-                    $field = $column["column"];
+                    $field = $column['column'];
                 }
 
                 if (collect($allowedFields)->contains($column['column']) && collect(['desc', 'asc'])->contains($column['order'])) {
@@ -58,9 +58,9 @@ class QueryBuilderHelper
 
             $builder->where(function (Builder $builder) use ($keyword, $searchableFields) {
                 return $searchableFields->map(function ($field) use ($keyword, $builder, $searchableFields) {
-                    $method = $searchableFields->first() === $field ? "where" : "orWhere";
+                    $method = $searchableFields->first() === $field ? 'where' : 'orWhere';
 
-                    return $builder->{$method}($field, "LIKE", "%$keyword%");
+                    return $builder->{$method}($field, 'LIKE', "%$keyword%");
                 });
             });
         });

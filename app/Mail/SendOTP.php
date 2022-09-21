@@ -20,6 +20,6 @@ class SendOTP extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject('Verification code for email')->view('mail.otp')->with(["otp" => $this->otp]);
+        return $this->subject('Verification code for email')->view('mail.otp')->with(['otp' => $this->otp]);
     }
 }

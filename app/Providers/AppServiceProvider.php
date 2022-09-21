@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use App\Helpers\Enum;
+use App\Helpers\QueryBuilderHelper;
 use App\Services\ApplicationService\Providers\ApplicationServiceServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\TelescopeServiceProvider;
 
@@ -16,14 +20,19 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerLucidApplicationProviders();
-        //$this->configurePassport();
+        $this->configurePassport();
         $this->configureDevelopmentPackages();
+
+        Factory::guessFactoryNamesUsing(function ($modelName) {
+            return 'Database\\Factories\\'.class_basename($modelName).'Factory';
+        });
     }
 
     public function boot()
     {
         $this->registerBlueprintMacros();
         $this->registerCollectionMacros();
+        $this->registerQueryBuilderMacros();
     }
 
     private function registerLucidApplicationProviders()
@@ -40,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function configureDevelopmentPackages()
     {
-        if (! $this->app->environment('production')) {
+        if (! $this->app->environment(['production'])) {
             Telescope::night();
             $this->app->register(TelescopeServiceProvider::class);
             $this->app->register(IdeHelperServiceProvider::class);
@@ -51,7 +60,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //Passport::tokensExpireIn(now()->addDays(15));
         //Passport::refreshTokensExpireIn(now()->addDays(30));
-        //Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        // TODO control the ttl from application settings later
+        Passport::personalAccessTokensExpireIn(now()->addMonths());
     }
 
     private function registerBlueprintMacros()
@@ -74,5 +84,20 @@ class AppServiceProvider extends ServiceProvider
     {
         Collection::macro('enum', fn () => Enum::make($this[0]));
         Collection::macro('enumToCollection', fn () => Enum::make($this[0])->collection());
+    }
+
+    private function registerQueryBuilderMacros()
+    {
+        Builder::macro('purifySortingQuery', function (array|null $order, array $sortableFields) {
+            return QueryBuilderHelper::purifySortingQuery($this, $order, $sortableFields);
+        });
+
+        Builder::macro('search', function (array $searchableFields, $keyword) {
+            return QueryBuilderHelper::search($this, $searchableFields, $keyword);
+        });
+
+        Builder::macro('purifyPaginationQuery', function ($perPage, $page) {
+            return QueryBuilderHelper::purifyPaginationQuery($this, $perPage, $page);
+        });
     }
 }

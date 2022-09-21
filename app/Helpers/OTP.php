@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 class OTP
 {
-    private string $cachePrefix = "otp_";
+    private string $cachePrefix = 'otp_';
 
     public string $otp;
 
@@ -50,7 +50,7 @@ class OTP
 
     public static function verify($recipient, $otp): bool
     {
-        $cacheKey = "otp_".$recipient;
+        $cacheKey = 'otp_'.$recipient;
 
         return Cache::get($cacheKey) == $otp;
     }
