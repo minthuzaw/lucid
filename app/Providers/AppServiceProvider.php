@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Helpers\Enum;
 use App\Helpers\QueryBuilderHelper;
 use App\Services\ApplicationService\Providers\ApplicationServiceServiceProvider;
+use App\Services\Products\Providers\ProductsServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if (config('core.toggle_app_services')) {
             $this->app->register(ApplicationServiceServiceProvider::class);
+            $this->app->register(ProductsServiceProvider::class);
         } else {
             collect(config('core.lucid_application_providers'))
                 ->filter(fn ($provider) => $provider['active'])
