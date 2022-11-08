@@ -13,7 +13,7 @@ class AuthController extends Controller
      * @group Api Auth
      * @unauthenticated
      *
-     * @bodyParam email string required The email of the user. Example: admin@gmail.com
+     * @bodyParam email string required The email of the user. Example: superadmin@onenex.co
      * @bodyParam password string required The password of the user. Example: password
      */
     public function login()
