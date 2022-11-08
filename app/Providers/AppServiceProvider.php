@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Helpers\Enum;
 use App\Helpers\QueryBuilderHelper;
 use App\Services\ApplicationService\Providers\ApplicationServiceServiceProvider;
+use App\Services\Author\Providers\AuthorServiceProvider;
 use App\Services\Book\Providers\BookServiceProvider;
 use App\Services\Products\Providers\ProductsServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -43,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(ApplicationServiceServiceProvider::class);
             $this->app->register(ProductsServiceProvider::class);
             $this->app->register(BookServiceProvider::class);
+            $this->app->register(AuthorServiceProvider::class);
         } else {
             collect(config('core.lucid_application_providers'))
                 ->filter(fn ($provider) => $provider['active'])
